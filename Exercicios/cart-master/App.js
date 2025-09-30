@@ -27,21 +27,45 @@ const App = () => {
         ];
       } else {
         return prevItems.map((item) => {
-          if (item.id == id) {
-            item.qty++;
-          }
-          return item;
+          item.id == id
+            ? {
+                ...item,
+                qty: item.qty + 1,
+              }
+            : item;
         });
       }
     });
   };
 
+  const increaseQuantity = (id) => {
+    setItensCarrinho((prevItems) =>
+      prevItems.map((item) =>
+        item.id === id ? { ...item, qty: item.qty + 1 } : item
+      )
+    );
+  };
+
+  const decreaseQuantity = (id) => {
+    setItensCarrinho((prevItems) =>
+      prevItems
+        .map((item) => (item.id === id ? { ...item, qty: item.qty - 1 } : item))
+        .filter((item) => item.qty > 0)
+    );
+  };
+
+  const removeItem = (id) => {
+    setItensCarrinho((prevItems) => prevItems.filter((item) => item.id !== id));
+  };
   const getItemsCount = () => {
     return itensCarrinho.reduce((sum, item) => sum + item.qty, 0);
   };
 
   const getTotalPrice = () => {
-    return itensCarrinho.reduce((sum, item) => sum + item.product.price * item.qty, 0);
+    return itensCarrinho.reduce(
+      (sum, item) => sum + item.product.price * item.qty,
+      0
+    );
   };
 
   return (
@@ -53,7 +77,9 @@ const App = () => {
           options={({ navigation }) => ({
             title: "Produtos",
             headerTitleStyle: styles.headerTitle,
-            headerRight: () => <CartIcon navigation={navigation} getItemsCount={getItemsCount} />,
+            headerRight: () => (
+              <CartIcon navigation={navigation} getItemsCount={getItemsCount} />
+            ),
           })}
         />
         <Stack.Screen
@@ -61,20 +87,35 @@ const App = () => {
           options={({ navigation }) => ({
             title: "Detalhes do produto",
             headerTitleStyle: styles.headerTitle,
-            headerRight: () => <CartIcon navigation={navigation} getItemsCount={getItemsCount} />,
+            headerRight: () => (
+              <CartIcon navigation={navigation} getItemsCount={getItemsCount} />
+            ),
           })}
         >
-          {(props) => <ProductDetails {...props} addItemToCart={addItemToCart} />}
+          {(props) => (
+            <ProductDetails {...props} addItemToCart={addItemToCart} />
+          )}
         </Stack.Screen>
         <Stack.Screen
           name="Cart"
           options={({ navigation }) => ({
             title: "Meu carrinho",
             headerTitleStyle: styles.headerTitle,
-            headerRight: () => <CartIcon navigation={navigation} getItemsCount={getItemsCount} />,
+            headerRight: () => (
+              <CartIcon navigation={navigation} getItemsCount={getItemsCount} />
+            ),
           })}
         >
-          {(props) => <Cart {...props} items={itensCarrinho} getTotalPrice={getTotalPrice} />}
+          {(props) => (
+            <Cart
+              {...props}
+              cartItems={itensCarrinho}
+              increaseQuantity={increaseQuantity}
+              decreaseQuantity={decreaseQuantity}
+              removeItem={removeItem}
+              getTotalPrice={getTotalPrice}
+            />
+          )}
         </Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
