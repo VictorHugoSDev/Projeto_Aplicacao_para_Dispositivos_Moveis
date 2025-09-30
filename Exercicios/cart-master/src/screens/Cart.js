@@ -33,6 +33,12 @@ export function Cart({ cartItems }) {
               >
                 <Text style={styles.buttonText}>+</Text>
               </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.removeButton}
+                onPress={() => removeFromCart(item.id)}
+              >
+                <Text style={styles.removeButtonText}>Remover</Text>
+              </TouchableOpacity>
             </View>
           </View>
         )}
@@ -98,5 +104,17 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 18,
     fontWeight: "bold",
+  },
+  removeButton: {
+    backgroundColor: "#ff4444",
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 4,
+    marginLeft: 8,
+  },
+  removeButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 12,
   },
 });
