@@ -8,34 +8,27 @@ import { CartIcon } from "./src/components/CartIcon";
 import { useState } from "react";
 import { getProduct } from "./src/services/productsService";
 
-const App = () => {
+export default function App() {
   const Stack = createNativeStackNavigator();
   const [itensCarrinho, setItensCarrinho] = useState([]);
 
-  const addItemToCart = (id) => {
-    const product = getProduct(id);
-    setItensCarrinho((prevItems) => {
-      const item = prevItems.find((item) => item.id == id);
-      if (!item) {
-        return [
-          ...prevItems,
-          {
-            id,
-            qty: 1,
-            product,
-          },
-        ];
-      } else {
-        return prevItems.map((item) => {
-          item.id == id
-            ? {
-                ...item,
-                qty: item.qty + 1,
-              }
-            : item;
-        });
-      }
-    });
+  // Adiciona produto ao carrinho (agora async)
+  const addItemToCart = async (id) => {
+    try {
+      const product = await getProduct(id);
+      setItensCarrinho((prevItems) => {
+        const item = prevItems.find((i) => i.id === id);
+        if (!item) {
+          return [...prevItems, { id, qty: 1, product }];
+        } else {
+          return prevItems.map((i) =>
+            i.id === id ? { ...i, qty: i.qty + 1 } : i
+          );
+        }
+      });
+    } catch (error) {
+      console.error("Erro ao adicionar produto ao carrinho:", error);
+    }
   };
 
   const increaseQuantity = (id) => {
@@ -57,6 +50,7 @@ const App = () => {
   const removeItem = (id) => {
     setItensCarrinho((prevItems) => prevItems.filter((item) => item.id !== id));
   };
+
   const getItemsCount = () => {
     return itensCarrinho.reduce((sum, item) => sum + item.qty, 0);
   };
@@ -120,12 +114,10 @@ const App = () => {
       </Stack.Navigator>
     </NavigationContainer>
   );
-};
+}
 
 const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
   },
 });
-
-export default App;
