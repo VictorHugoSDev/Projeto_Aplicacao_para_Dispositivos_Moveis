@@ -1,5 +1,11 @@
 import React from "react";
-import { View, Text, FlatList, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 import { numberFormat } from "../services/numberFormat";
 
 export function Cart({ cartItems }) {
@@ -8,12 +14,26 @@ export function Cart({ cartItems }) {
       <Text style={styles.title}>Seu Carrinho</Text>
       <FlatList
         data={cartItems}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View style={styles.itemContainer}>
             <Text style={styles.name}>{item.name}</Text>
             <Text style={styles.price}>{numberFormat(item.price)}</Text>
-            <Text style={styles.quantity}>Qtd: {item.quantity}</Text>
+            <View style={styles.quantityContainer}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => decreanseQuantity(item.id)}
+              >
+                <Text style={styles.buttonText}>-</Text>
+              </TouchableOpacity>
+              <Text style={styles.quantity}>{item.quantity}</Text>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => increaseQuantity(item.id)}
+              >
+                <Text style={styles.buttonText}>+</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         )}
         ListEmptyComponent={
@@ -61,5 +81,22 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 32,
     color: "#888",
+  },
+  quantityContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    flex: 1,
+    justifyContent: "flex-end",
+  },
+  button: {
+    backgroundColor: "#eee",
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 4,
+    marginHorizontal: 4,
+  },
+  buttonText: {
+    fontSize: 18,
+    fontWeight: "bold",
   },
 });
