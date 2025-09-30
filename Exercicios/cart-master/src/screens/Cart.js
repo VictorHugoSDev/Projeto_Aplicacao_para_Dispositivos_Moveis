@@ -57,6 +57,9 @@ export function Cart({
           Total: {numberFormat(getTotalPrice())}
         </Text>
       </View>
+      <TouchableOpacity style={styles.checkoutButton}>
+        <Text style={styles.checkoutButtonText}>Finalizar Compra</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -139,5 +142,17 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     color: "#333",
+  },
+  checkoutButton: {
+    marginTop: 16,
+    backgroundColor: "orange",
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: "center",
+  },
+  checkoutButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 16,
   },
 });
