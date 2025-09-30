@@ -8,7 +8,13 @@ import {
 } from "react-native";
 import { numberFormat } from "../services/numberFormat";
 
-export function Cart({ cartItems }) {
+export function Cart({
+  cartItems,
+  increaseQuantity,
+  decreanseQuantity,
+  removeFromCart,
+  getTotalPrice,
+}) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Seu Carrinho</Text>
@@ -46,6 +52,11 @@ export function Cart({ cartItems }) {
           <Text style={styles.empty}>Seu carrinho está vazio.</Text>
         }
       />
+      <View style={styles.totalContainer}>
+        <Text style={styles.totalText}>
+          Total: {numberFormat(getTotalPrice())}
+        </Text>
+      </View>
     </View>
   );
 }
@@ -116,5 +127,17 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
     fontSize: 12,
+  },
+  totalContainer: {
+    marginTop: 24,
+    padding: 12,
+    backgroundColor: "#eee",
+    borderRadius: 8,
+    alignItems: "flex-end",
+  },
+  totalText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#333",
   },
 });
